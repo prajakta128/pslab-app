@@ -1,7 +1,15 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:pslab/constants.dart';
+import 'package:pslab/providers/board_state_provider.dart';
+import 'package:pslab/view/widgets/main_scaffold_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ConnectDeviceScreen extends StatefulWidget {
   const ConnectDeviceScreen({super.key});
+  final String iconUsbDisconnected =
+      'assets/icons/icons_usb_disconnected_100.png';
+  final String iconUsbConnected = 'assets/icons/icons8_usb_connected_100.png';
 
   @override
   State<StatefulWidget> createState() => _HomeScreenState();
@@ -10,7 +18,186 @@ class ConnectDeviceScreen extends StatefulWidget {
 class _HomeScreenState extends State<ConnectDeviceScreen> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return MainScaffold(
+      index: 2,
+      title: connectDevice,
+      body: Consumer<BoardStateProvider>(
+        builder: (context, provider, _) {
+          return SafeArea(
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Center(
+                      child: Image.asset(
+                        provider.pslabIsConnected
+                            ? widget.iconUsbConnected
+                            : widget.iconUsbDisconnected,
+                        width: 80,
+                        height: 80,
+                      ),
+                    ),
+                    Center(
+                      child: Container(
+                        margin: const EdgeInsets.only(
+                            top: 20, bottom: 60, left: 40, right: 40),
+                        child: Text(
+                          provider.pslabIsConnected
+                              ? '$deviceConnected\n\n${provider.pslabVersionID}'
+                              : noDeviceFound,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.blueGrey[600],
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: provider.pslabIsConnected ? false : true,
+                      child: Container(
+                        margin: const EdgeInsets.only(
+                            left: 40, right: 40, bottom: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              stepsToConnect[0],
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              stepsToConnect[1],
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Text(
+                              stepsToConnect[2],
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Text(
+                              stepsToConnect[3],
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: provider.pslabIsConnected ? false : true,
+                      child: Center(
+                        child: Text(
+                          bluetoothWifiConnection,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: provider.pslabIsConnected ? false : true,
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.zero,
+                                ),
+                                backgroundColor: const Color(0xFFD32F2F),
+                                foregroundColor: Colors.white,
+                              ),
+                              onPressed: () {},
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Text(
+                                  bluetooth,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 20),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.zero,
+                                ),
+                                backgroundColor: const Color(0xFFD32F2F),
+                                foregroundColor: Colors.white,
+                              ),
+                              onPressed: () {},
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Text(
+                                  wifi,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin:
+                          const EdgeInsets.only(top: 30, left: 120, right: 120),
+                      child: const Divider(color: Colors.grey, height: 1),
+                    ),
+                    Center(
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        padding: const EdgeInsets.all(10),
+                        child: GestureDetector(
+                          onTap: () async {
+                            await launchUrl(Uri.parse(pslabUrl));
+                          },
+                          child: Text(
+                            whatisPslab,
+                            style: const TextStyle(
+                              decoration: TextDecoration.underline,
+                              decorationThickness: 1,
+                              decorationColor: Color(0xFFD32F2F),
+                              color: Color(0xFFD32F2F),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }
