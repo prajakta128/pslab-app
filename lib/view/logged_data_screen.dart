@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pslab/others/csv_service.dart';
 import 'package:pslab/theme/colors.dart';
+import 'package:pslab/view/gyroscope_screen.dart';
 import 'package:pslab/view/logged_data_chart_screen.dart';
 import 'package:pslab/view/luxmeter_screen.dart';
 import 'package:pslab/view/soundmeter_screen.dart';
@@ -177,6 +178,14 @@ class _LoggedDataScreenState extends State<LoggedDataScreen> {
             ),
           );
           break;
+        case 'gyroscope':
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => GyroscopeScreen(playbackData: data),
+            ),
+          );
+          break;
         case 'luxmeter':
           Navigator.push(
             context,
@@ -314,6 +323,7 @@ class _LoggedDataScreenState extends State<LoggedDataScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               if (widget.instrumentName == "soundmeter" ||
+                                  widget.instrumentName == "gyroscope" ||
                                   widget.instrumentName == "luxmeter")
                                 IconButton(
                                   icon:
