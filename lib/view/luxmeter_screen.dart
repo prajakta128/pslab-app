@@ -222,12 +222,13 @@ class _LuxMeterScreenState extends State<LuxMeterScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        _provider.setConfigProvider(_configProvider);
-
+        _provider.onSensorError = (msg) {
+          _showSensorErrorSnackbar(msg);
+        };
         if (widget.playbackData != null) {
           _provider.startPlayback(widget.playbackData!);
         } else {
-          _provider.initializeSensors(onError: _showSensorErrorSnackbar);
+          _provider.setConfigProvider(_configProvider);
         }
       }
     });
