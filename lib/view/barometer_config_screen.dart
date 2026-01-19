@@ -46,7 +46,11 @@ class _BarometerConfigScreenState extends State<BarometerConfigScreen> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: appBarColor),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: appBarColor,
+          statusBarIconBrightness: Brightness.light,
+          statusBarBrightness: Brightness.dark,
+        ),
         backgroundColor: primaryRed,
         title: Text(
           appLocalizations.barometerConfig,

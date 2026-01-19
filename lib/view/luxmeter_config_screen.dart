@@ -48,7 +48,11 @@ class _LuxMeterConfigScreenState extends State<LuxMeterConfigScreen> {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         iconTheme: IconThemeData(color: appBarContentColor),
-        systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: appBarColor),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: appBarColor,
+          statusBarIconBrightness: Brightness.light,
+          statusBarBrightness: Brightness.dark,
+        ),
         backgroundColor: primaryRed,
         title: Text(
           appLocalizations.luxmeterConfigurations,

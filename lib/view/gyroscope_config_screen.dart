@@ -47,7 +47,11 @@ class _GyroscopeConfigScreenState extends State<GyroscopeConfigScreen> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: appBarColor),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: appBarColor,
+          statusBarIconBrightness: Brightness.light,
+          statusBarBrightness: Brightness.dark,
+        ),
         leading: Builder(builder: (context) {
           return IconButton(
             onPressed: () {
