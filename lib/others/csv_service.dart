@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:csv/csv.dart' as csv;
 import 'package:file_picker/file_picker.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pslab/others/logger_service.dart';
 import 'package:share_plus/share_plus.dart';
@@ -59,6 +60,44 @@ class CsvService {
       final csvData = codec.encode(data);
       await file.writeAsString(csvData);
       logger.i('${appLocalizations.csvFileSaved}: ${file.path}');
+
+      if (Platform.isAndroid) {
+        try {
+          final externalDir = await getExternalStorageDirectory();
+          final pslabDir = Directory('${externalDir?.path}/PSLab');
+
+          final logEntries =
+              <({String fileName, String instrument, DateTime modified})>[];
+          if (await pslabDir.exists()) {
+            for (final entity in pslabDir.listSync(followLinks: false)) {
+              if (entity is! Directory) continue;
+              final instrument = entity.path.split('/').last;
+              for (final file in entity
+                  .listSync(followLinks: false)
+                  .whereType<File>()
+                  .where((f) => f.path.endsWith('.csv'))) {
+                logEntries.add((
+                  fileName: file.path.split('/').last,
+                  instrument: instrument,
+                  modified: file.statSync().modified,
+                ));
+              }
+            }
+          }
+          logEntries.sort((a, b) => b.modified.compareTo(a.modified));
+          final widgetListData = logEntries
+              .take(20)
+              .map((e) => {'fileName': e.fileName, 'instrument': e.instrument})
+              .toList();
+
+          await HomeWidget.saveWidgetData<String>(
+              'logs_json_key', jsonEncode(widgetListData));
+          await HomeWidget.updateWidget(androidName: 'widget.WidgetReceiver');
+        } catch (widgetError) {
+          logger.w('Error during widget update: $widgetError');
+        }
+      }
+
       return file;
     } catch (e) {
       logger.e('${appLocalizations.csvSavingError}: $e');
