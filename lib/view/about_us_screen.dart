@@ -139,8 +139,9 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                   if (await canLaunchUrl(uri)) {
                     await launchUrl(uri);
                   } else {
-                    debugPrint(
-                      'Could not launch ${appLocalizations.feedbackForm}',
+                    logger.e(
+                      'Could not launch feedback form URL',
+                      'url=${appLocalizations.feedbackForm}',
                     );
                   }
                 },
