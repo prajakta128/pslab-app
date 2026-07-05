@@ -94,8 +94,8 @@ class _HomeScreenState extends State<ConnectDeviceScreen> {
                       child: Image.asset(
                         provider.pslabIsConnected
                             ? (provider.scienceLabCommon.isWiFiConnected()
-                                  ? ConnectDeviceScreen.iconWifiConnected
-                                  : ConnectDeviceScreen.iconUsbConnected)
+                                ? ConnectDeviceScreen.iconWifiConnected
+                                : ConnectDeviceScreen.iconUsbConnected)
                             : ConnectDeviceScreen.iconUsbDisconnected,
                         width: 80,
                         height: 80,
