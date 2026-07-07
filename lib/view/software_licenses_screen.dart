@@ -142,9 +142,20 @@ class MiscOssLicenseSingle extends StatelessWidget {
                         decoration: TextDecoration.underline),
                   ),
                   onTap: () async {
-                    final uri = Uri.parse(package.homepage!);
+                    final uri = Uri.tryParse(package.homepage!);
+                    if (uri == null) {
+                      logger.e(
+                        'Invalid URL: ${package.homepage}',
+                      );
+                      return;
+                    }
                     if (await canLaunchUrl(uri)) {
-                      await launchUrl(uri);
+                      final launched = await launchUrl(uri);
+                      if (!launched) {
+                        logger.e(
+                          'launchUrl returned false for ${package.homepage} after canLaunchUrl succeeded',
+                        );
+                      }
                     } else {
                       logger.e(
                         'Could not launch ${package.homepage}',
